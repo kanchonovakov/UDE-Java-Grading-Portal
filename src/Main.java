@@ -15,5 +15,5 @@ void main() {
 */
 
 void main(){
- IO.println("Hello World");
+    IO.println("Projektidee 1: Hausaufgaben abgeben und verwalten.");
 }
