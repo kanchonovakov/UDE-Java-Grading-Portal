@@ -2,8 +2,8 @@ import java.util.List;
 import java.util.ArrayList;
 //Änderung mit *extends*
 public class Lehrer extends Nutzer { //Datei lesen, korrigieren und Aufgaben erstellen.
-    //Attributen
-    private List<Schüler> zugewieseneSchüler; // Списък с учениците, които преподава
+    //Attribute
+    private List<Schüler> zugewieseneSchüler; //Liste mit Schüler
 
     //Konstruktor
     public Lehrer(int nutzerId, String vorname, String nachname, String benutzername,
@@ -13,7 +13,7 @@ public class Lehrer extends Nutzer { //Datei lesen, korrigieren und Aufgaben ers
     }
 
     //Getter und Setter Methoden
-    public List<Schüler> getZugewieseneSchüler() {
+    public List<Schüler> getZugewieseneSchüler() { //TODO will be used
         return zugewieseneSchüler;
     }
 

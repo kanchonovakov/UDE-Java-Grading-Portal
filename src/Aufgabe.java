@@ -1,11 +1,10 @@
-import java.util.List;
-import java.util.ArrayList;
+
 public class Aufgabe {  //Aufgaben, wie macht man sie.
                         //Erstellt von Lehrer/Admin, korrigiert von Lehrer/Admin,
                         //gelesen von allen, Schüler können Aufgaben (-Datei) senden.
     //TODO Wie erstellt man einen File?
     //TODO Titel der File, Ersteller, Korigierer.
-    //Attributen
+    //Attribute
     private String titel;
     //Konstruktor
     public Aufgabe(String titel) {
@@ -16,7 +15,7 @@ public class Aufgabe {  //Aufgaben, wie macht man sie.
     public String getTitel() {
         return titel;
     }
-    public void setTitel(String titel) {
+    public void setTitel(String titel) { //TODO will be used
         this.titel = titel;
     }
 }

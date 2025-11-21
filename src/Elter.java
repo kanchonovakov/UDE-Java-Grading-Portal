@@ -13,7 +13,7 @@ public class Elter extends Nutzer { //Datei lesen.
 
     //Funktionen
 
-    //Verbindung zwischen Lehrer, setElter
+    //Verbindung zwischen Schülern-Eltern, setElter
     public void addKind(Schüler kind) {
         if (!this.kinder.contains(kind)) {
             this.kinder.add(kind);

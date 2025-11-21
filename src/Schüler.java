@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 public class Schüler extends Nutzer { //Datei lesen und senden
-    //Attributen
+    //Attribute
     private Elter elter; //Verbindung mit dem Elter
     private List<Aufgabe> abgegebeneAufgaben; //Aufgaben
 
@@ -17,4 +17,6 @@ public class Schüler extends Nutzer { //Datei lesen und senden
         this.abgegebeneAufgaben.add(aufgabe);
         System.out.println(getVollerName() + " hat Aufgabe '" + aufgabe.getTitel() + "' abgegeben.");
     }
+
+    //TODO verbindung mit den Eltern*
 }//Basis fr Schüler.

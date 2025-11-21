@@ -1,5 +1,3 @@
-import java.util.List;
-import java.util.ArrayList;
 public class Nutzer {
 
     private int nutzerId;
@@ -25,51 +23,27 @@ public class Nutzer {
 
     //Getter und Setter Methoden
     //nutzerId
-    public int getNutzerId() {
-        return nutzerId;
-    }
-    public void setNutzerId(int nutzerId) {
-        this.nutzerId = nutzerId;
-    }
+    public int getNutzerId() {return nutzerId;}
+    public void setNutzerId(int nutzerId) {this.nutzerId = nutzerId;}
     //benutzername
-    public String getBenutzername() {
-        return benutzername;
-    }
-    public void setBenutzername(String benutzername) {
-        this.benutzername = benutzername;
-    }
+    public String getBenutzername() {return benutzername;}
+    public void setBenutzername(String benutzername) {this.benutzername = benutzername;}
     //erkennungscode
-    public String getErkennungscode() {
-        return erkennungscode;
-    }
-    public void setErkennungscode(String erkennungscode) {
-        this.erkennungscode = erkennungscode;
-    }
+    public String getErkennungscode() {return erkennungscode;}
+    public void setErkennungscode(String erkennungscode) {this.erkennungscode = erkennungscode;}
     //vorname
-    public String getVorname() {
-        return vorname;
-    }
-    public void setVorname(String vorname) {
-        this.vorname = vorname;
-    }
+    public String getVorname() {return vorname;}
+    public void setVorname(String vorname) {this.vorname = vorname;}
     //nachname
-    public String getNachname() {
-        return nachname;
-    }
-    public void setNachname(String nachname) {
-        this.nachname = nachname;
-    }
+    public String getNachname() {return nachname;}
+    public void setNachname(String nachname) {this.nachname = nachname;}
     //passwort
-    public void setPasswort(String passwort) {
-        this.passwort = passwort;
-    }
+    public void setPasswort(String passwort) {this.passwort = passwort;}
+    //Hier gibt es kein Getter für passwort**
     //VollerName
-    public String getVollerName() {
-        return this.vorname + " " + this.nachname;
-    }
+    public String getVollerName() {return this.vorname + " " + this.nachname;}
     //Funktionen
     public boolean passwortPruefenNeu(String eingabePasswort) {
-
         if (this.passwort == null) {
             return eingabePasswort == null;
         }
