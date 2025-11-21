@@ -1,0 +1,48 @@
+- Nutzer
+  -
+- Attribute: nutzerId, vorname, nachname, benutzername, passwort, erkennungscode
+- Getter und Setter Methoden: alle*
+- Funktionen: passwortPruefenNeu, (aufgabeLesen/dateiOefnen)
+- Elter
+  -
+- Attribute: --||--, kinder
+- Getter und Setter Methoden: --||--, getKinder
+- Funktionen: --||--, addKinder
+- Schüler
+  - 
+- Attribute: --||--, elter, abgegebeneAufgaben
+- Getter und Setter Methoden: --||--
+- Funktionen: --||--, sendeAufgabe
+- Lehrer
+  - 
+- Attribute: --||--, zugewieseneSchüler
+- Getter und Setter Methoden: --||--, getZugewieseneSchüler
+- Funktionen: --||--, erstelleAufgabe, (korrigiereAufgabe)
+- Admin
+  - 
+- Attribute: --||--
+- Getter und Setter Methoden: --||--
+- Funktionen: --||--, (loescheNutzer), (zeigeAlleNutzer)
+---
+- Aufgabe
+  - 
+- Attribute: titel, (ersteller), file, (frist), (istKorrigiert) 
+- Getter und Setter Methoden: getTitel (und andere*)
+- Funktionen: (speichern) - selbst speichern*
+- File
+  - 
+- Idee* (Bild, Text, Presentation usw. )
+- Attribute: titel, (ersteller), (datum), (typ)
+- Getter und Setter Methoden: getTitel, setTitel
+- AufgabeManager
+  - 
+- Attribute: alleAufgaben
+- Getter und Setter Methoden: getAlleAufgaben
+- loescheAufgabe
+- DatenbankManager
+  - 
+- Attribute: alleNutzer
+- Getter und Setter Methoden: getAlleNutzer
+- Server
+  - 
+- Attribute: dbManager, aufgabeManager
