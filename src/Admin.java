@@ -1,4 +1,37 @@
-public class Admin extends Nutzer {     //Datei lesen, korrigieren und Aufgaben erstellen.
-                                        //Rektor oder IT developer
-                                        //Der Einzige der die Kode von alle Numtzer sehen/erstellen kann.
+import java.util.List;
+import java.util.ArrayList;
+//Änderung mit *extends*
+public class Admin extends Lehrer {     //Datei lesen, korrigieren und Aufgaben erstellen.
+                                        //Rektor oder IT Developer
+                                        //der einzige, der die Kodes von allen Nutzern sehen/erstellen kann.
+
+    //Konstruktor
+    public Admin(int nutzerId, String vorname, String nachname, String benutzername,
+                 String passwort, String erkennungscode) {
+        super(nutzerId, vorname, nachname, benutzername, passwort, erkennungscode);
+    }
+
+    //Funktionen
+
+    //TODO* Nutzer löschen  ----Selten Benutzt----
+    public void loescheNutzer(int nutzerId) {
+        System.out.println("Admin " + getVollerName() + " löscht Nutzer mit ID: " + nutzerId);
+    }
+
+
+    public void zeigeAlleNutzer() {
+        //TODO DatenBankManager gebraucht*
+        System.out.println("Admin " + getVollerName() + " zeigt alle registrierten Nutzer an.");
+    }
+
+    //toString()
+
+    @Override
+    public String toString() {
+        return "Nutzer [ID=" + getNutzerId() +
+                "Admin mit Name=" + getVollerName() +
+                ", Username=" + getBenutzername() +
+                ", Code=" + getErkennungscode() +
+                "]";
+    }
 }

@@ -40,6 +40,6 @@ public class Elter extends Nutzer { //Datei lesen.
     //toString()
     @Override
     public String toString() {
-        return super.toString() + " [Rolle: Elter, Anzahl Kinder: " + kinder.size() + "]";
+        return super.toString() + " [Elter, Anzahl Kinder: " + kinder.size() + "]";
     }
 }

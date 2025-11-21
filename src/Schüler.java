@@ -12,7 +12,7 @@ public class Schüler extends Nutzer { //Datei lesen und senden
         this.abgegebeneAufgaben = new ArrayList<>();
         this.elter = null;
     }
-
+    //Aufgabe senden
     public void sendeAufgabe(Aufgabe aufgabe) {
         this.abgegebeneAufgaben.add(aufgabe);
         System.out.println(getVollerName() + " hat Aufgabe '" + aufgabe.getTitel() + "' abgegeben.");
