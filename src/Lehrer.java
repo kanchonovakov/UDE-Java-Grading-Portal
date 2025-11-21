@@ -12,7 +12,7 @@ public class Lehrer extends Nutzer { //Datei lesen, korrigieren und Aufgaben ers
         this.zugewieseneSchüler = new ArrayList<>();
     }
 
-    //Getter und Setter Methoden    }
+    //Getter und Setter Methoden
     public List<Schüler> getZugewieseneSchüler() {
         return zugewieseneSchüler;
     }
@@ -26,7 +26,7 @@ public class Lehrer extends Nutzer { //Datei lesen, korrigieren und Aufgaben ers
         return null;
     }
 
-    //Korriegieren Fuktion TODO*
+    //Korrigieren Function TODO*
 
 
     //toString()
