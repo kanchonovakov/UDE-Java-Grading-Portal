@@ -1,20 +1,22 @@
 import java.util.List;
 import java.util.ArrayList;
-//Änderung mit *extends*
 public class Lehrer extends Nutzer { //Datei lesen, korrigieren und Aufgaben erstellen.
     //Attribute
-    private List<Schüler> zugewieseneSchüler; //Liste mit Schüler
+    private List<Schueler> zugewieseneSchueler; //Liste mit Schüler
 
     //Konstruktor
-    public Lehrer(int nutzerId, String vorname, String nachname, String benutzername,
-                  String passwort, String erkennungscode) {
-        super(nutzerId, vorname, nachname, benutzername, passwort, erkennungscode);
-        this.zugewieseneSchüler = new ArrayList<>();
+    public Lehrer(String vorname, String nachname, String benutzername,
+                   String passwort) {
+        super(vorname, nachname, benutzername, passwort, Role.LEHRER);
+        this.zugewieseneSchueler = new ArrayList<>();
     }
 
     //Getter und Setter Methoden
-    public List<Schüler> getZugewieseneSchüler() { //TODO will be used
-        return zugewieseneSchüler;
+    public List<Schueler> getZugewieseneSchueler() {
+        return zugewieseneSchueler;
+    }
+    public void addSchueler(Schueler s) {
+        this.zugewieseneSchueler.add(s);
     }
 
     //Funktionen
@@ -25,16 +27,11 @@ public class Lehrer extends Nutzer { //Datei lesen, korrigieren und Aufgaben ers
         // bis jetzt ergibt null.
         return null;
     }
-
     //Korrigieren Function TODO*
-
-
     //toString()
-
     @Override
     public String toString() {
-        return super.toString() + " [Lehrer - Anzahl Schüler: " + zugewieseneSchüler.size() + "]";
+        return super.toString() + " [Lehrer - Anzahl Schüler: " + zugewieseneSchueler.size() + "]";
     }
-
     //equals() und hashCode() sind von Nutzer geerbt
 }
