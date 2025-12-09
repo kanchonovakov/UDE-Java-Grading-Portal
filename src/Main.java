@@ -10,12 +10,52 @@ void main() {
 //Kommentare sind wichtig*
 //Sinvolle Benennung
 
+
+void main(){
+    System.out.println("Hello World! ");
+    IO.println("Projektidee 1: Hausaufgaben abgeben und verwalten.");
+
+    System.out.println(" --- Nutzer erstellen ---");
+    //ID muss 1 sein
+    Admin mainAdmin = new Admin("Max", "Mustermann", "mAdmin", "xcvbvcdrtghhjnbvfre456yu");
+    System.out.println("Main Admin hingefügt" + mainAdmin);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //TODO Atrubuten
 //TODO Klassenkonstruktoren
 //TODO Getter- und Setter-Methoden
 //TODO Funktionen der Klassen
 //TODO Funktionsprototypen -Methodenname, Übergabeparameter und Rückgabetyp, nur ohne die eigentliche Funktionalität
 //TODO Zugriffsmodifikatoren (public, protected, no-modifier, private) ---private als Standard---
+
 //TODO Kommentieren Sie bei jeder Methode, die nicht private ist, warum sie keinen Modifier hat oder public protected sein muss.
 //TODO Überlegen Sie, wie Ihre bestehenden Klassen sinnvoll miteinander verknüpft werden können, und implementieren Sie diese Beziehungen.
 //TODO Vererbung
@@ -33,7 +73,3 @@ void main() {
 //TODO hashCode()
 //Implementieren Sie die Methoden so, dass sie einheitlich und konsistent mit equals() sind.
 //Orientieren Sie sich dabei an den Beispielen aus den Vorlesungsfolien.
-
-void main(){
-    IO.println("Projektidee 1: Hausaufgaben abgeben und verwalten.");
-}

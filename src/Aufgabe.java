@@ -1,21 +1,21 @@
 
-public class Aufgabe {  //Aufgaben, wie macht man sie.
-                        //Erstellt von Lehrer/Admin, korrigiert von Lehrer/Admin,
-                        //gelesen von allen, Schüler können Aufgaben (-Datei) senden.
-    //TODO Wie erstellt man einen File?
-    //TODO Titel der File, Ersteller, Korigierer.
-    //Attribute
+public class Aufgabe {
     private String titel;
-    //Konstruktor
-    public Aufgabe(String titel) {
-        this.titel = titel;
-    }
+    private String beschreibung; //statt File*
+    private String abgabefrist;
 
+    //Konstruktor
+    public Aufgabe(String titel, String beschreibung, String aufgabefrist) {
+        this.titel = titel;
+        this.beschreibung = beschreibung;
+        this.abgabefrist = aufgabefrist;
+    }
     //Getter Setter Methoden
     public String getTitel() {
         return titel;
     }
-    public void setTitel(String titel) { //TODO will be used
-        this.titel = titel;
+    @Override
+    public String toString() {
+        return titel + " (bis: " + abgabefrist + ")";
     }
 }
