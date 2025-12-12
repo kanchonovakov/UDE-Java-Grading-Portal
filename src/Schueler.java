@@ -1,31 +1,40 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 public class Schueler extends Nutzer { //Datei lesen und senden
     //Attribute
-    private Elter elter; //Verbindung mit dem Elter
+    private List<Elter> eltern; //Verbindung mit dem Eltern*
     private List<Aufgabe> abgegebeneAufgaben; //Aufgaben
 
-    //Konstruktor
-    public Schueler(String vorname, String nachname, String benutzername,
-                   String passwort) {
-        super(vorname, nachname, benutzername, passwort, Role.SCHUELER); //super*
-        this.abgegebeneAufgaben = new ArrayList<>();
-        this.elter = null;
+    public Schueler(String vorname, String nachname, String benutzername, String passwort, Role role, List<Elter> eltern, List<Aufgabe> abgegebeneAufgaben) {
+        super(vorname, nachname, benutzername, passwort, role);
+        this.eltern = (eltern == null) ? new ArrayList<>() : eltern;
+        this.abgegebeneAufgaben = (abgegebeneAufgaben == null) ? new ArrayList<>() : abgegebeneAufgaben;
     }
 
-    //Getter und Setter Methoden
     public List<Aufgabe> getAbgegebeneAufgaben() {
         return abgegebeneAufgaben;
     }
-    public Elter getElter() {
-        return elter;
+
+    public void setAbgegebeneAufgaben(List<Aufgabe> abgegebeneAufgaben) {
+        this.abgegebeneAufgaben = (abgegebeneAufgaben == null) ? new ArrayList<>() : abgegebeneAufgaben;
     }
-    public void setElter(Elter elter) {
-        this.elter = elter;
+
+    public List<Elter> getEltern() {
+        return eltern;
+    }
+
+    public void setEltern(List<Elter> eltern) {
+        this.eltern = (eltern == null) ? new ArrayList<>() : eltern;
+    }
+
+    @Override
+    public String getVollerName() {
+        return super.getVollerName();
     }
 
     //Funktionen
-
     //Aufgabe senden
     public void sendeAufgabe(Aufgabe aufgabe) {
         if (aufgabe != null) {
@@ -33,9 +42,21 @@ public class Schueler extends Nutzer { //Datei lesen und senden
             System.out.println(getVollerName() + " hat Aufgabe '" + aufgabe.getTitel() + "' abgegeben.");
         }
     }
+
     @Override
     public String toString() {
-        String elterName = (elter != null) ? elter.getVollerName() : "Kein Elter";
-        return super.toString() + " [Schueler - Elter: " + elterName + "]";
+        String elternNamen = "";
+        if (eltern == null || eltern.isEmpty()) {
+            elternNamen = "Keine Eltern";
+        } else {
+            for (Elter e : eltern) {
+                if (!elternNamen.isEmpty()) {
+                    elternNamen += ", ";
+                }
+                elternNamen += e.getVollerName();
+            }
+        }
+
+        return super.toString() + " [Schueler - Eltern: " + elternNamen + "]";
     }
 }
