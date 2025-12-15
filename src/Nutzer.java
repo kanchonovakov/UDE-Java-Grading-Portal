@@ -53,7 +53,10 @@ public class Nutzer {
     public void setPasswort(String passwort) {
         this.passwort = passwort;
     } //Passwort ändern
-    //Hier gibt es kein Getter für passwort**
+    public String getPasswort() {
+        return passwort;
+    }
+
     //VollerName
     public String getVollerName() {
         return this.vorname + " " + this.nachname;

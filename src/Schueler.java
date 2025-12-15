@@ -7,10 +7,10 @@ public class Schueler extends Nutzer { //Datei lesen und senden
     private List<Elter> eltern; //Verbindung mit dem Eltern*
     private List<Aufgabe> abgegebeneAufgaben; //Aufgaben
 
-    public Schueler(String vorname, String nachname, String benutzername, String passwort, Role role, List<Elter> eltern, List<Aufgabe> abgegebeneAufgaben) {
-        super(vorname, nachname, benutzername, passwort, role);
-        this.eltern = (eltern == null) ? new ArrayList<>() : eltern;
-        this.abgegebeneAufgaben = (abgegebeneAufgaben == null) ? new ArrayList<>() : abgegebeneAufgaben;
+    public Schueler(String vorname, String nachname, String benutzername, String passwort) {
+        super(vorname, nachname, benutzername, passwort, Role.SCHUELER);
+        this.eltern = new ArrayList<>();
+        this.abgegebeneAufgaben = new ArrayList<>();
     }
 
     public List<Aufgabe> getAbgegebeneAufgaben() {

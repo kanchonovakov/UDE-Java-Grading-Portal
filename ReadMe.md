@@ -15,14 +15,15 @@
 - **Bereits Implementierte Funktionen**:
    - Must have: Erstellung von Aufgaben durch Lehrer, Hochladen von Dateien durch Schüler, Korrektur und Bewertung durch Lehrer.
    - Nice to have: Nutzerprofile für Schüler, Lehrer und Eltern.
-   - Should have: **work in progress** (*: Speicherung von alten Aufgaben und Verbindungen zwischen Nutzern.)
+   - Should have: Speicherung von alten Aufgaben und Verbindungen zwischen Nutzern.
 
 ## Modul-Übersicht
  - **Modul/Klasse** // **Aufgabe/Funktion**
    - Aufgabe ==> Objekt zur Speicherung von Titel, Beschreibung, Frist und Ersteller.
-   - Nutzer ==> Verwaltet Basisdaten (Name, Login) und Hierarchie (Rollen: Lehrer, Schüler, Eltern).
-   - Datenbankmanager ==> Speichern von Aufgaben, Nutzer und die Verbindungen (Eltern-Kind) dauerhaft (SQLite). 
-   - Server ==> Koordiniert Login, Registrierung und Kommunikation zwischen Client (Main) und Datenbank.
+   - Nutzer ==> Verwaltet Basisdaten (ID, Name, Login) und Hierarchie (Rollen: Lehrer, Schüler, Eltern).
+   - DatenbankManager ==> Speichern von Aufgaben, Nutzer und die Verbindungen (Eltern-Kind) dauerhaft (SQLite). 
+   - PasswortUtils ==> Neue Hilfsklasse zur Sicherheit. Wandelt Passwörter mittels SHA-256 in Hashes um.
+   - Main ==> Startpunkt des Programms, Initialisierung der Datenbank und Testdaten.
 
 ## Datenbank-Struktur (Dauerhafte Speicherung)
 
@@ -53,12 +54,15 @@
    - Roles sind implementiert.
    - Änderungen in der Server Klasse, keine AufgabenManager und keine Files mehr. 
    - Beschreibung in ReadMe.md aktualisiert.
-2) Aktuel 
+2) Aktuell 
    - Datenbank (SQLite) wird implementiert.
    - Tests durchführen und Datenbank-Speicherung abschließen.
-
-
+3) Update: - 15.12.2025:
+   - Datenbank finalisiert: CRUD-Methoden
+   - Sicherheit: Passwort-Hashing implementiert.
+   - Main-Klasse: Testdaten und Initialisierung abgeschlossen.
 ## TODOs 
-- Immer noch besser dokumentieren 
-- INSERT-Methoden im DatenbankManager fertigstellen.
-- Login-Prozess mit der Datenbank verbinden.
+- Immer noch besser dokumentieren (?) 
+- INSERT-Methoden im DatenbankManager fertigstellen. Ja
+- Login-Prozess mit der Datenbank verbinden. Ja
+- Tests für alle Klassen und Methoden schreiben. Ja
