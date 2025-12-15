@@ -1,3 +1,4 @@
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 public class Elter extends Nutzer { //Datei lesen.
@@ -17,7 +18,7 @@ public class Elter extends Nutzer { //Datei lesen.
     public void addKind(Schueler kind) {
         if (kind != null && !this.kinder.contains(kind)) {
             this.kinder.add(kind);
-            kind.setElter(this);
+            kind.addElter(this);
             System.out.println(getVollerName() + " wurde mit Kind " + kind.getVollerName() + " verbunden.");
         } else {
             System.out.println("Kind ist bereits verknüpft.");
@@ -27,6 +28,11 @@ public class Elter extends Nutzer { //Datei lesen.
 
     public void zeigeKinderAufgaben(Schueler kind) {
         System.out.println("--- Aufgaben Übersicht für " + getVollerName() + " ---");
+
+        if (kinder.isEmpty()) {
+            System.out.println("Keine Kinder zugewiesen.");
+        }
+
         for (Schueler s : kinder) {
             System.out.println("Kind: " + s.getVollerName());
             System.out.println("Abgegebene Aufgaben: " + s.getAbgegebeneAufgaben());

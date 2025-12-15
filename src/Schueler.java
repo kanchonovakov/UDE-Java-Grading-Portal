@@ -42,6 +42,11 @@ public class Schueler extends Nutzer { //Datei lesen und senden
             System.out.println(getVollerName() + " hat Aufgabe '" + aufgabe.getTitel() + "' abgegeben.");
         }
     }
+    public void addElter(Elter elter) {
+        if (elter != null && this.eltern.size() < 2 && !this.eltern.contains(elter)) {
+            this.eltern.add(elter);
+        }
+    }
 
     @Override
     public String toString() {
