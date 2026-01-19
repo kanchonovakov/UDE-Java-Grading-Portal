@@ -1,7 +1,10 @@
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.io.Serializable;
 
-public class Aufgabe {
+
+public class Aufgabe implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     private String titel;
     private String beschreibung; //statt File*

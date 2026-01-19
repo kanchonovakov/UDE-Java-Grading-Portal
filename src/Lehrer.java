@@ -1,6 +1,8 @@
 import java.util.List;
 import java.util.ArrayList;
-public class Lehrer extends Nutzer { //Datei lesen, korrigieren und Aufgaben erstellen.
+import java.io.Serializable;
+public class Lehrer extends Nutzer implements Serializable{
+    private static final long serialVersionUID = 1L;
     //Attribute
     private List<Schueler> zugewieseneSchueler; //Liste mit Schüler
 

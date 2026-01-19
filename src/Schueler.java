@@ -1,8 +1,10 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import java.io.Serializable;
 
-public class Schueler extends Nutzer { //Datei lesen und senden
+public class Schueler extends Nutzer implements Serializable{
+    private static final long serialVersionUID = 1L;
     //Attribute
     private List<Elter> eltern; //Verbindung mit dem Eltern*
     private List<Aufgabe> abgegebeneAufgaben; //Aufgaben

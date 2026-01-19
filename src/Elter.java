@@ -1,7 +1,9 @@
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
-public class Elter extends Nutzer { //Datei lesen.
+import java.io.Serializable;
+public class Elter extends Nutzer implements Serializable{
+    private static final long serialVersionUID = 1L;
     //Attribute
     private List<Schueler> kinder;
 

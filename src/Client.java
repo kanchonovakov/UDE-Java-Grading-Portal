@@ -9,34 +9,62 @@ public class Client {
 
     public static void main(String[] args) {
         System.out.println("--- Client startet ---");
+        Scanner scanner = new Scanner(System.in);
 
         try (Socket socket = new Socket(SERVER_IP, SERVER_PORT);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             Scanner scanner = new Scanner(System.in)) {
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
-            // 1. Handshake
-            System.out.println("[Server]: " + in.readLine());
+            System.out.println("Verbindung hergestellt.");
 
-            // 2. Interaktive Schleife
             boolean running = true;
             while (running) {
-                System.out.print("Befehl (LOGIN [User] [Pass] oder QUIT): ");
-                String input = scanner.nextLine();
+                System.out.println("\nWas möchtest du tun?");
+                System.out.println("1: Einloggen");
+                System.out.println("2: Beenden (QUIT)");
+                System.out.print("Auswahl: ");
 
-                // Eingabe an Server senden
-                // Beispiel "LOGIN h.mueller 1234"
-                out.println(input);
+                String auswahl = scanner.nextLine();
 
-                // Antwort lesen
-                String response = in.readLine();
-                System.out.println("[Server Antwort]: " + response);
+                if (auswahl.equals("1")) {
+                    // Daten abfragen
+                    System.out.print("Benutzername: ");
+                    String user = scanner.nextLine();
+                    System.out.print("Passwort: ");
+                    String pass = scanner.nextLine();
 
-                // Wenn wir QUIT senden beenden wir auch den Client
-                if (input.equalsIgnoreCase("QUIT")) {
+                    // Objekt erstellen
+                    LoginRequest request = new LoginRequest(user, pass);
+
+                    // Objekt senden
+                    out.writeObject(request);
+                    System.out.println("[Client]: Login-Anfrage gesendet...");
+
+                    // Antwort empfangen
+                    try {
+                        Object antwort = in.readObject();
+
+                        if (antwort instanceof LoginResponse) {
+                            LoginResponse response = (LoginResponse) antwort;
+                            System.out.println("[Server Antwort]: " + response.getNachricht());
+
+                            if (response.getStatus() == Status.LOGIN_SUCCESS) {
+                                Nutzer meinNutzer = response.getNutzer();
+                                System.out.println("--> Eingeloggt als: " + meinNutzer.getVollerName());
+                            }
+                        }
+                    } catch (ClassNotFoundException e) {
+                        System.out.println("Fehler beim Lesen der Antwort.");
+                    }
+
+                } else if (auswahl.equalsIgnoreCase("2") || auswahl.equalsIgnoreCase("QUIT")) {
                     running = false;
+                    System.out.println("Client wird beendet.");
+                } else {
+                    System.out.println("Ungültige Eingabe.");
                 }
             }
+
         } catch (IOException e) {
             System.out.println("Verbindungsfehler: Ist der Server gestartet?");
             System.out.println(e.getMessage());

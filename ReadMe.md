@@ -22,6 +22,8 @@
  - **Modul/Klasse** // **Aufgabe/Funktion**
    - Server ==> Zentraler Knotenpunkt. Hält die Verbindung zur Datenbank und lauscht auf Port 12345 auf Anfragen der Clients.
    - Client ==> Das Programm für den Nutzer (Lehrer/Schüler). Verbindet sich mit dem Server, um Daten zu senden oder abzufragen.
+   - LoginRequest ==> Transport-Objekt für Login-Daten (User, Passwort).
+   - LoginResponse ==> Transport-Objekt für die Server-Antwort (Status + Nutzer Objekt).
    - Command (enum) ==> Definiert alle erlaubten Befehle (LOGIN, PING, QUIT, etc)
    - Status (enum) ==> Definiert alle möglichen Antworten (OK, ERROR, LOGIN_SUCCESS, etc)
    - Aufgabe ==> Objekt zur Speicherung von Titel, Beschreibung, Frist und Ersteller.
@@ -43,10 +45,15 @@
 - Eltern zu Schüler (n:m): Ein Schüler kann mehrere Eltern haben, und ein Elternteil kann mehrere Kinder haben. Dies wird über die Tabelle `eltern_kind` gelöst.
 
 ## Technische Architektur (Netzwerk)
-Das System nutzt TCP-Sockets für die Kommunikation:
-1.  Server: Startet ServerSocket auf Port 12345 und initialisiert die Datenbank.
-2.  Client: Verbindet sich via Socket "localhost", 12345 mit dem Server.
-3.  Kommunikation: Austausch von Textnachrichten über PrintWriter Out und BufferedReader In.
+Das System nutzt TCP-Sockets und Java Object Serialization
+1. Verbindung - Server Port 12345 und Client nutzen ObjectOutputStream und ObjectInputStream.
+2. Datenübertragung - Java-Objekte (DTOs) übertragen.
+   - Vorteil - Typensicherheit und strukturierte Daten.
+   - DTOs - Daten-Klassen wie LoginRequest dienen nur dem Transport und enthalten keine Logik.
+3. Ablauf:
+   - Client sendet LoginRequest.
+   - Server prüft DB und sendet LoginResponse zurück.
+   - Die Response enthält direkt das eingeloggte Nutzer-Objekt Lehrer oder Schüler.
 
 ## Projekt-Historie & Updates
 ### Alte Klassen und Methoden (Stand bis 21.11.2025): 
@@ -74,9 +81,9 @@ Das System nutzt TCP-Sockets für die Kommunikation:
 2) Update - Mitte Dez 2025: Datenbank-Grundgerüst erstellt.
 3) Update - 15.12.2025: Datenbank finalisiert (CRUD), Sicherheit (Hashing) integriert.
 4) Update: 19.01.2026
-   - Umstellung auf Netzwerk-Architektur (Server/Client)
-   - Implementierung des Kommunikationsprotokolls (Command und Status Enums).
-   - Login-Logik über das Netzwerk erfolgreich getestet.
+   - Umstellung auf Netzwerk-Architektur (Server/Client).
+   - Implementierung von (Data Transfer Objects).
+   - Kommunikation auf Object-Streams umgestellt.
 ## TODOs 
 - Dokumentation aktualisieren ja
 - INSERT-Methoden im DatenbankManager fertigstellen ja

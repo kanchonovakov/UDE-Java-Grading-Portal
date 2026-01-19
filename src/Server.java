@@ -8,7 +8,7 @@ public class Server {
     public Server() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             dbManager = new DatenbankManager();
-            // Testdaten nur laden, wenn nötig (Fehler abfangen falls schon da)
+            // Testdaten nur laden, wenn nötig
             try { dbManager.erstelleTestDaten(); } catch (Exception e) {}
 
             System.out.println("Server gestartet auf Port " + PORT);
@@ -24,68 +24,52 @@ public class Server {
         }
     }
 
-    // Anfrage-Bearbeitung
+    // Anfrage-Bearbeitung mit Objekten
     private void handleClient(Socket clientSocket) {
         try (
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)
+                // Streams erstellen (Reihenfolge erst Out, dann In)
+                ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
         ) {
             System.out.println("Client verbunden: " + clientSocket.getInetAddress());
-            out.println("Verbindung hergestellt. Bereit für Befehle.");
 
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println("Empfangen: " + inputLine);
-
-                //String zerlegen
-                // "LOGIN max 1234" -> parts[0]="LOGIN", parts[1]="max", parts[2]="1234"
-                String[] parts = inputLine.split(" ");
-                String commandName = parts[0].toUpperCase();
-
+            // Wir lesen dauerhaft Objekte, bis der Client die Verbindung trennt
+            while (true) {
                 try {
-                    // String in Enum umwandeln
-                    Command cmd = Command.valueOf(commandName);
+                    // Warten auf ein Objekt vom Client
+                    Object empfangenesObjekt = in.readObject();
 
-                    switch (cmd) {
-                        case PING:
-                            out.println(Status.OK + " PONG");
-                            break;
+                    // Prüfen, was für ein Objekt das ist
+                    if (empfangenesObjekt instanceof LoginRequest) {
+                        LoginRequest req = (LoginRequest) empfangenesObjekt;
+                        System.out.println("Login-Versuch für: " + req.getBenutzername());
 
-                        case QUIT:
-                            out.println(Status.OK + " Bye bye");
-                            return; // Methode beenden - Verbindung trennen
+                        // Datenbank fragen
+                        Nutzer nutzer = dbManager.login(req.getBenutzername(), req.getPasswort());
 
-                        case LOGIN:
-                            //LOGIN benutzername passwort
-                            if (parts.length < 3) {
-                                out.println(Status.ERROR + " Fehlende Parameter");
-                            } else {
-                                String user = parts[1];
-                                String pass = parts[2];
-
-                                // Datenbank fragen
-                                Nutzer nutzer = dbManager.login(user, pass);
-
-                                if (nutzer != null) {
-                                    out.println(Status.LOGIN_SUCCESS + " Willkommen " + nutzer.getVorname());
-                                } else {
-                                    out.println(Status.INVALID_CREDENTIALS);
-                                }
-                            }
-                            break;
-
-                        default:
-                            out.println(Status.ERROR + " Unbekannter Befehl (in Switch)");
+                        if (nutzer != null) {
+                            // Erfolg - LoginResponse mit Nutzer-Objekt senden
+                            LoginResponse resp = new LoginResponse(Status.LOGIN_SUCCESS, nutzer, "Login erfolgreich!");
+                            out.writeObject(resp);
+                        } else {
+                            // Fehler - LoginResponse ohne Nutzer senden
+                            LoginResponse resp = new LoginResponse(Status.INVALID_CREDENTIALS, null, "Benutzername oder Passwort falsch.");
+                            out.writeObject(resp);
+                        }
                     }
+                    // Hier später weitere 'else if' für andere Requests
 
-                } catch (IllegalArgumentException e) {
-                    // Falls der Client Quatsch sendet wie Bla Bla
-                    out.println(Status.ERROR + " Ungültiges Kommando");
+                } catch (EOFException e) {
+                    // Client hat die Verbindung getrennt
+                    System.out.println("Client hat die Verbindung beendet.");
+                    break;
+                } catch (ClassNotFoundException e) {
+                    System.out.println("Unbekanntes Objekt empfangen.");
                 }
             }
 
         } catch (IOException e) {
-            System.out.println("Fehler bei Client-Kommunikation: " + e.getMessage());
+            System.out.println("Verbindung unterbrochen: " + e.getMessage());
         }
     }
 
