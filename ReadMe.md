@@ -75,6 +75,12 @@ Das System nutzt TCP-Sockets und Java Object Serialization
 - LOGIN_SUCCESS: Login erfolgreich, Benutzer erkannt. 
 - INVALID_CREDENTIALS: Falsches Passwort oder Benutzername.
 
+### Begründung der Socket-Wahl
+Ich habe mich für die Klasse Socket TCP entschieden und nicht für DatagramSocket UDP.
+- Grund - TCP garantiert eine zuverlässige Übertragung.
+- Bei einem Hausaufgaben-System ist es wichtig, dass keine Daten (Login-Informationen oder Aufgabentexte) verloren gehen. 
+- UDP wäre zwar schneller, aber Pakete könnten verloren gehen, was bei wichtigen Daten nicht akzeptabel ist. 
+- Multicast wird nicht benötigt, da Client und Server direkt kommunizieren.
     
 ### Update Log:
 1) Update - 09.12.2025: Basis-Klassen und Rollen implementiert.

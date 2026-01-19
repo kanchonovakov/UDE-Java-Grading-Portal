@@ -5,12 +5,13 @@ import java.util.Scanner;
 public class Client {
 
     private static final String SERVER_IP = "localhost";
-    private static final int SERVER_PORT = 12345;
+    private static final int SERVER_PORT = 8080; // Aufgabe verlangt Port 8080
 
     public static void main(String[] args) {
         System.out.println("--- Client startet ---");
         Scanner scanner = new Scanner(System.in);
 
+        // Verbindung aufbauen und Streams öffnen
         try (Socket socket = new Socket(SERVER_IP, SERVER_PORT);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
@@ -27,7 +28,6 @@ public class Client {
                 String auswahl = scanner.nextLine();
 
                 if (auswahl.equals("1")) {
-                    // Daten abfragen
                     System.out.print("Benutzername: ");
                     String user = scanner.nextLine();
                     System.out.print("Passwort: ");
@@ -36,8 +36,9 @@ public class Client {
                     // Objekt erstellen
                     LoginRequest request = new LoginRequest(user, pass);
 
-                    // Objekt senden
+                    // Objekt senden und FLUSH aufrufen (Wichtig für Aufgabe 3c)
                     out.writeObject(request);
+                    out.flush();
                     System.out.println("[Client]: Login-Anfrage gesendet...");
 
                     // Antwort empfangen
@@ -64,6 +65,7 @@ public class Client {
                     System.out.println("Ungültige Eingabe.");
                 }
             }
+            // Am Ende schließt try-with-resources den Socket automatisch (Aufgabe 3c erfüllt)
 
         } catch (IOException e) {
             System.out.println("Verbindungsfehler: Ist der Server gestartet?");

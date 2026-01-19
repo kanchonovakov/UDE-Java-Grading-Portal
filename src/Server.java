@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 
 public class Server {
-    private static final int PORT = 12345;
+    private static final int PORT = 8080; // Auch hier auf 8080 ändern!
     private DatenbankManager dbManager;
 
     public Server() {
@@ -24,43 +24,35 @@ public class Server {
         }
     }
 
-    // Anfrage-Bearbeitung mit Objekten
     private void handleClient(Socket clientSocket) {
         try (
-                // Streams erstellen (Reihenfolge erst Out, dann In)
                 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
         ) {
             System.out.println("Client verbunden: " + clientSocket.getInetAddress());
 
-            // Wir lesen dauerhaft Objekte, bis der Client die Verbindung trennt
             while (true) {
                 try {
-                    // Warten auf ein Objekt vom Client
                     Object empfangenesObjekt = in.readObject();
 
-                    // Prüfen, was für ein Objekt das ist
                     if (empfangenesObjekt instanceof LoginRequest) {
                         LoginRequest req = (LoginRequest) empfangenesObjekt;
                         System.out.println("Login-Versuch für: " + req.getBenutzername());
 
-                        // Datenbank fragen
                         Nutzer nutzer = dbManager.login(req.getBenutzername(), req.getPasswort());
 
                         if (nutzer != null) {
-                            // Erfolg - LoginResponse mit Nutzer-Objekt senden
                             LoginResponse resp = new LoginResponse(Status.LOGIN_SUCCESS, nutzer, "Login erfolgreich!");
                             out.writeObject(resp);
+                            out.flush(); // Auch hier flush()
                         } else {
-                            // Fehler - LoginResponse ohne Nutzer senden
-                            LoginResponse resp = new LoginResponse(Status.INVALID_CREDENTIALS, null, "Benutzername oder Passwort falsch.");
+                            LoginResponse resp = new LoginResponse(Status.INVALID_CREDENTIALS, null, "Falsche Daten.");
                             out.writeObject(resp);
+                            out.flush(); // Auch hier flush()
                         }
                     }
-                    // Hier später weitere 'else if' für andere Requests
 
                 } catch (EOFException e) {
-                    // Client hat die Verbindung getrennt
                     System.out.println("Client hat die Verbindung beendet.");
                     break;
                 } catch (ClassNotFoundException e) {
