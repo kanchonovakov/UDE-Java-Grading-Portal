@@ -1,4 +1,4 @@
-public class Admin extends Nutzer { //Änderung, nicht mehr von Lehrer erben, sondern von Nutzer
+public class Admin extends Nutzer {
     //Konstruktor
     public Admin(String vorname, String nachname, String benutzername,
                  String passwort) {

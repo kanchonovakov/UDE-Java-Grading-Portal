@@ -1,5 +1,5 @@
 # Projektidee 1: Hausaufgaben abgeben und verwalten.
-
+- Klassennammen und Funktionen sind auf Deutsch 
 ## Projektbeschreibung
 1) Ziel des Projekts: 
 - Das Projekt soll eine Plattform bieten, auf der Schüler ihre Hausaufgaben digital abgeben können und Lehrer sie verwalten, korrigieren und bewerten können. 
@@ -19,6 +19,8 @@
 
 ## Modul-Übersicht
  - **Modul/Klasse** // **Aufgabe/Funktion**
+   - Server ==> Zentraler Knotenpunkt. Hält die Verbindung zur Datenbank und lauscht auf Port 12345 auf Anfragen der Clients.
+   - Client ==> Das Programm für den Nutzer (Lehrer/Schüler). Verbindet sich mit dem Server, um Daten zu senden oder abzufragen.
    - Aufgabe ==> Objekt zur Speicherung von Titel, Beschreibung, Frist und Ersteller.
    - Nutzer ==> Verwaltet Basisdaten (ID, Name, Login) und Hierarchie (Rollen: Lehrer, Schüler, Eltern).
    - DatenbankManager ==> Speichern von Aufgaben, Nutzer und die Verbindungen (Eltern-Kind) dauerhaft (SQLite). 
@@ -37,6 +39,11 @@
 - Lehrer zu Aufgaben (1:n): Ein Lehrer erstellt viele Aufgaben.
 - Eltern zu Schüler (n:m): Ein Schüler kann mehrere Eltern haben, und ein Elternteil kann mehrere Kinder haben. Dies wird über die Tabelle `eltern_kind` gelöst.
 
+## Technische Architektur (Netzwerk)
+Das System nutzt TCP-Sockets für die Kommunikation:
+1.  Server: Startet ServerSocket auf Port 12345 und initialisiert die Datenbank.
+2.  Client: Verbindet sich via Socket "localhost", 12345 mit dem Server.
+3.  Kommunikation: Austausch von Textnachrichten über PrintWriter Out und BufferedReader In.
 
 ## Projekt-Historie & Updates
 ### Alte Klassen und Methoden (Stand bis 21.11.2025): 
@@ -61,8 +68,12 @@
    - Datenbank finalisiert: CRUD-Methoden
    - Sicherheit: Passwort-Hashing implementiert.
    - Main-Klasse: Testdaten und Initialisierung abgeschlossen.
+4) Update: 19.01.2026
+   - Umstellung auf Netzwerk-Architektur begonnen.
+   - Klassen Server und Client für TCP-Kommunikation implementiert.
+   - Erster Verbindungstest (Handshake) erfolgreich.
 ## TODOs 
-- Immer noch besser dokumentieren (?) 
+- Immer noch besser dokumentieren ja
 - INSERT-Methoden im DatenbankManager fertigstellen. Ja
 - Login-Prozess mit der Datenbank verbinden. Ja
 - Tests für alle Klassen und Methoden schreiben. Ja
