@@ -1,6 +1,5 @@
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.io.Serializable;
 
 public class Schueler extends Nutzer implements Serializable{
@@ -9,7 +8,7 @@ public class Schueler extends Nutzer implements Serializable{
     private List<Elter> eltern; //Verbindung mit dem Eltern*
     private List<Aufgabe> abgegebeneAufgaben; //Aufgaben
 
-    public Schueler(String vorname, String nachname, String benutzername, String passwort) {
+    public Schueler(int id, String vorname, String nachname, String benutzername, String passwort) {
         super(vorname, nachname, benutzername, passwort, Role.SCHUELER);
         this.eltern = new ArrayList<>();
         this.abgegebeneAufgaben = new ArrayList<>();

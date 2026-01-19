@@ -22,6 +22,7 @@
  - **Modul/Klasse** // **Aufgabe/Funktion**
    - Server ==> Zentraler Knotenpunkt. Hält die Verbindung zur Datenbank und lauscht auf Port 12345 auf Anfragen der Clients.
    - Client ==> Das Programm für den Nutzer (Lehrer/Schüler). Verbindet sich mit dem Server, um Daten zu senden oder abzufragen.
+   - ClientHandler ==> Übernimmt die Kommunikation mit einem einzelnen Client in einem separaten Thread.
    - LoginRequest ==> Transport-Objekt für Login-Daten (User, Passwort).
    - LoginResponse ==> Transport-Objekt für die Server-Antwort (Status + Nutzer Objekt).
    - Command (enum) ==> Definiert alle erlaubten Befehle (LOGIN, PING, QUIT, etc)
@@ -30,7 +31,7 @@
    - Nutzer ==> Verwaltet Basisdaten (ID, Name, Login) und Hierarchie (Rollen: Lehrer, Schüler, Eltern).
    - DatenbankManager ==> Speichern von Aufgaben, Nutzer und die Verbindungen (Eltern-Kind) dauerhaft (SQLite). 
    - PasswortUtils ==> Neue Hilfsklasse zur Sicherheit. Wandelt Passwörter mittels SHA-256 in Hashes um.
-   - Main ==> Startpunkt des Programms, Initialisierung der Datenbank und Testdaten.
+   
 
 ## Datenbank-Struktur (Dauerhafte Speicherung)
 
@@ -45,24 +46,32 @@
 - Eltern zu Schüler (n:m): Ein Schüler kann mehrere Eltern haben, und ein Elternteil kann mehrere Kinder haben. Dies wird über die Tabelle `eltern_kind` gelöst.
 
 ## Technische Architektur (Netzwerk)
-Das System nutzt TCP-Sockets und Java Object Serialization
-1. Verbindung - Server Port 12345 und Client nutzen ObjectOutputStream und ObjectInputStream.
-2. Datenübertragung - Java-Objekte (DTOs) übertragen.
-   - Vorteil - Typensicherheit und strukturierte Daten.
-   - DTOs - Daten-Klassen wie LoginRequest dienen nur dem Transport und enthalten keine Logik.
-3. Ablauf:
-   - Client sendet LoginRequest.
-   - Server prüft DB und sendet LoginResponse zurück.
-   - Die Response enthält direkt das eingeloggte Nutzer-Objekt Lehrer oder Schüler.
+### 1. Verbindung & Protokoll
+Das System nutzt TCP-Sockets auf Port 8080 und Java Object Serialization:
+- Es werden Java-Objekte (DTOs) übertragen statt Strings.
+- DTOs - Klassen wie LoginRequest dienen nur dem Transport und enthalten keine Logik.
+- Ablauf - Client sendet LoginRequest -> Server prüft DB -> Server sendet LoginResponse. 
 
-### Nebenläufigkeit (Multi-Threading)
+### 2. Socket-Wahl (Begründung)
+Ich habe mich für die Klasse Socket (TCP) entschieden und nicht für DatagramSocket (UDP).
+- Grund: TCP garantiert eine zuverlässige Übertragung.
+- Bei einem Hausaufgaben-System ist es wichtig, dass keine Daten (Login-Informationen oder Aufgabentexte) verloren gehen.
+- UDP wäre zwar schneller, aber Pakete könnten verloren gehen.
+
+### 3. Nebenläufigkeit (Multi-Threading)
 Der Server wurde erweitert, um mehrere Clients gleichzeitig bedienen zu können:
-1.  Server-Loop- Der Haupt-Server wartet nur auf eingehende Verbindungen accept().
-2.  ClientHandler- Sobald eine Verbindung steht, wird ein ClientHandler-Objekt erstellt.
-3.  Threads- Der ClientHandler wird in einem eigenen Java-Thread new Thread(handler).start() ausgeführt.
-    - Vorteil- Der Haupt-Server wird nicht blockiert und kann sofort weitere Clients annehmen.
-    - Ressourcen- Jeder Client hat seinen eigenen Socket und Input/Output-Stream.
+1. Server-Loop - Der Haupt-Server wartet nur auf eingehende Verbindungen accept().
+2. ClientHandler - Sobald eine Verbindung steht, wird ein ClientHandler-Objekt erstellt.
+3. Threads -Der ClientHandler wird in einem eigenen Java-Thread new Thread(handler).start() ausgeführt.
 
+### 4. Synchronisation & Race Condition Analyse
+**Absicherung:**
+Da mehrere Threads auf den DatenbankManager zugreifen, wurden alle schreibenden Methoden nutzerSpeichern, aufgabeSpeichern, etc
+
+**Race Condition Szenario:**
+Zwei Clients ändern gleichzeitig denselben Datensatz.
+- Ohne Synchronisation: Datenbank-Sperrfehler "Database is locked".
+- Mit Synchronisation: Threads müssen warten, bis der erste Thread fertig ist
 
 ## Projekt-Historie & Updates
 ### Alte Klassen und Methoden (Stand bis 21.11.2025): 
@@ -72,33 +81,17 @@ Der Server wurde erweitert, um mehrere Clients gleichzeitig bedienen zu können:
   - Hierarchiemanager // assignRole() // Weist einem Nutzer eine Rolle zu (Lehrer, Schüler, Eltern).
   - Datenbankmanager // saveOldAssignments() // Speichert alte Hausaufgaben in der Datenbank.
   - Server // sendAssignment() // Sendet eine Hausaufgabe an den entsprechenden Nutzer.
-
-1. Anfrage-Format (Client -> Server): COMMAND [Parameter] [Parameter] ...
-- PING: Testet Verbindung. 
-- QUIT: Beendet Verbindung. 
-- LOGIN [user] [pass]: Versucht einen Login mit Benutzername und Passwort.
-- GET_AUFGABEN: Fragt Liste aller Aufgaben ab (geplant).
-
-2. Antwort-Format (Server -> Client): STATUS [Nachricht]
-- OK / ERROR: Allgemeine Rückmeldungen.
-- LOGIN_SUCCESS: Login erfolgreich, Benutzer erkannt. 
-- INVALID_CREDENTIALS: Falsches Passwort oder Benutzername.
-
-### Begründung der Socket-Wahl
-Ich habe mich für die Klasse Socket TCP entschieden und nicht für DatagramSocket UDP.
-- Grund - TCP garantiert eine zuverlässige Übertragung.
-- Bei einem Hausaufgaben-System ist es wichtig, dass keine Daten (Login-Informationen oder Aufgabentexte) verloren gehen. 
-- UDP wäre zwar schneller, aber Pakete könnten verloren gehen, was bei wichtigen Daten nicht akzeptabel ist. 
-- Multicast wird nicht benötigt, da Client und Server direkt kommunizieren.
     
 ### Update Log:
 1) Update - 09.12.2025: Basis-Klassen und Rollen implementiert.
 2) Update - Mitte Dez 2025: Datenbank-Grundgerüst erstellt.
 3) Update - 15.12.2025: Datenbank finalisiert (CRUD), Sicherheit (Hashing) integriert.
 4) Update: 19.01.2026
-   - Umstellung auf Netzwerk-Architektur (Server/Client).
-   - Implementierung von (Data Transfer Objects).
-   - Kommunikation auf Object-Streams umgestellt.
+   - Umstellung auf Netzwerk-Architektur (Server/Client) mit DTOs.
+   - Implementierung von Multi-Threading ClientHandler.
+   - Synchronisation der Datenbank-Zugriffe synchronized.
+   
+
 ## TODOs 
 - Dokumentation aktualisieren ja
 - INSERT-Methoden im DatenbankManager fertigstellen ja
@@ -106,4 +99,5 @@ Ich habe mich für die Klasse Socket TCP entschieden und nicht für DatagramSock
 - Tests für alle Klassen und Methoden schreiben ja
 - Netzwerk-Protokoll definieren (Commands/Status) ja
 - Login über Netzwerk implementieren ja
-- Aufgaben-Abruf über das Netzwerk implementieren Nein
+- Nebenläufigkeit (Threads) und Synchronisation einbauen ja
+

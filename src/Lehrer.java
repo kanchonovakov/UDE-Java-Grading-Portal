@@ -7,8 +7,8 @@ public class Lehrer extends Nutzer implements Serializable{
     private List<Schueler> zugewieseneSchueler; //Liste mit Schüler
 
     //Konstruktor
-    public Lehrer(String vorname, String nachname, String benutzername,
-                   String passwort) {
+    public Lehrer(int id, String vorname, String nachname, String benutzername,
+                  String passwort) {
         super(vorname, nachname, benutzername, passwort, Role.LEHRER);
         this.zugewieseneSchueler = new ArrayList<>();
     }

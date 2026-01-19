@@ -13,15 +13,15 @@ public class Server {
             // Testdaten nur laden, wenn nötig
             try { dbManager.erstelleTestDaten(); } catch (Exception e) {}
 
-            System.out.println("✅ Server gestartet auf Port " + PORT + " (Multi-Threaded)");
+            System.out.println(" Server gestartet auf Port " + PORT + " (Multi-Threaded)");
 
             while (true) {
                 System.out.println("Warte auf neue Verbindung...");
 
-                // 1. Verbindung annehmen (blockiert, bis jemand kommt)
+                // 1. Verbindung annehmen
                 Socket clientSocket = serverSocket.accept();
 
-                // 2. Handler erstellen (Übergabe von Socket und DB)
+                // 2. Handler erstellen
                 ClientHandler handler = new ClientHandler(clientSocket, dbManager);
 
                 // 3. NEUEN THREAD STARTEN

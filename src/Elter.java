@@ -1,4 +1,3 @@
-import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -8,7 +7,7 @@ public class Elter extends Nutzer implements Serializable{
     private List<Schueler> kinder;
 
     //Konstruktor
-    public Elter(String vorname, String nachname, String benutzername,
+    public Elter(int id, String vorname, String nachname, String benutzername,
                  String passwort) {
         super(vorname, nachname, benutzername, passwort, Role.ELTERNTEIL);
         this.kinder = new ArrayList<>();
