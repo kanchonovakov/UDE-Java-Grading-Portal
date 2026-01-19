@@ -1,5 +1,5 @@
 # Projektidee 1: Hausaufgaben abgeben und verwalten.
-- Klassennammen und Funktionen sind auf Deutsch 
+- Klassen   nammen und Funktionen sind auf Deutsch 
 ## Projektbeschreibung
 1) Ziel des Projekts: 
 - Das Projekt soll eine Plattform bieten, auf der Schüler ihre Hausaufgaben digital abgeben können und Lehrer sie verwalten, korrigieren und bewerten können. 
@@ -16,11 +16,14 @@
    - Must have: Erstellung von Aufgaben durch Lehrer, Hochladen von Dateien durch Schüler, Korrektur und Bewertung durch Lehrer.
    - Nice to have: Nutzerprofile für Schüler, Lehrer und Eltern.
    - Should have: Speicherung von alten Aufgaben und Verbindungen zwischen Nutzern.
+   - Netzwerk: Client-Server-Kommunikation - Commands & Status.
 
 ## Modul-Übersicht
  - **Modul/Klasse** // **Aufgabe/Funktion**
    - Server ==> Zentraler Knotenpunkt. Hält die Verbindung zur Datenbank und lauscht auf Port 12345 auf Anfragen der Clients.
    - Client ==> Das Programm für den Nutzer (Lehrer/Schüler). Verbindet sich mit dem Server, um Daten zu senden oder abzufragen.
+   - Command (enum) ==> Definiert alle erlaubten Befehle (LOGIN, PING, QUIT, etc)
+   - Status (enum) ==> Definiert alle möglichen Antworten (OK, ERROR, LOGIN_SUCCESS, etc)
    - Aufgabe ==> Objekt zur Speicherung von Titel, Beschreibung, Frist und Ersteller.
    - Nutzer ==> Verwaltet Basisdaten (ID, Name, Login) und Hierarchie (Rollen: Lehrer, Schüler, Eltern).
    - DatenbankManager ==> Speichern von Aufgaben, Nutzer und die Verbindungen (Eltern-Kind) dauerhaft (SQLite). 
@@ -54,26 +57,31 @@ Das System nutzt TCP-Sockets für die Kommunikation:
   - Datenbankmanager // saveOldAssignments() // Speichert alte Hausaufgaben in der Datenbank.
   - Server // sendAssignment() // Sendet eine Hausaufgabe an den entsprechenden Nutzer.
 
+1. Anfrage-Format (Client -> Server): COMMAND [Parameter] [Parameter] ...
+- PING: Testet Verbindung. 
+- QUIT: Beendet Verbindung. 
+- LOGIN [user] [pass]: Versucht einen Login mit Benutzername und Passwort.
+- GET_AUFGABEN: Fragt Liste aller Aufgaben ab (geplant).
+
+2. Antwort-Format (Server -> Client): STATUS [Nachricht]
+- OK / ERROR: Allgemeine Rückmeldungen.
+- LOGIN_SUCCESS: Login erfolgreich, Benutzer erkannt. 
+- INVALID_CREDENTIALS: Falsches Passwort oder Benutzername.
+
+    
 ### Update Log:
-1) Update : - 09.12.2025: Code funktioniert.
-   - Alle Basis Klassen sind implementiert.
-   - Admin Änderungen. 
-   - Roles sind implementiert.
-   - Änderungen in der Server Klasse, keine AufgabenManager und keine Files mehr. 
-   - Beschreibung in ReadMe.md aktualisiert.
-2) Aktuell 
-   - Datenbank (SQLite) wird implementiert.
-   - Tests durchführen und Datenbank-Speicherung abschließen.
-3) Update: - 15.12.2025:
-   - Datenbank finalisiert: CRUD-Methoden
-   - Sicherheit: Passwort-Hashing implementiert.
-   - Main-Klasse: Testdaten und Initialisierung abgeschlossen.
+1) Update - 09.12.2025: Basis-Klassen und Rollen implementiert.
+2) Update - Mitte Dez 2025: Datenbank-Grundgerüst erstellt.
+3) Update - 15.12.2025: Datenbank finalisiert (CRUD), Sicherheit (Hashing) integriert.
 4) Update: 19.01.2026
-   - Umstellung auf Netzwerk-Architektur begonnen.
-   - Klassen Server und Client für TCP-Kommunikation implementiert.
-   - Erster Verbindungstest (Handshake) erfolgreich.
+   - Umstellung auf Netzwerk-Architektur (Server/Client)
+   - Implementierung des Kommunikationsprotokolls (Command und Status Enums).
+   - Login-Logik über das Netzwerk erfolgreich getestet.
 ## TODOs 
-- Immer noch besser dokumentieren ja
-- INSERT-Methoden im DatenbankManager fertigstellen. Ja
-- Login-Prozess mit der Datenbank verbinden. Ja
-- Tests für alle Klassen und Methoden schreiben. Ja
+- Dokumentation aktualisieren ja
+- INSERT-Methoden im DatenbankManager fertigstellen ja
+- Login-Prozess mit der Datenbank verbinden ja 
+- Tests für alle Klassen und Methoden schreiben ja
+- Netzwerk-Protokoll definieren (Commands/Status) ja
+- Login über Netzwerk implementieren ja
+- Aufgaben-Abruf über das Netzwerk implementieren Nein
