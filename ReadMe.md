@@ -55,6 +55,15 @@ Das System nutzt TCP-Sockets und Java Object Serialization
    - Server prüft DB und sendet LoginResponse zurück.
    - Die Response enthält direkt das eingeloggte Nutzer-Objekt Lehrer oder Schüler.
 
+### Nebenläufigkeit (Multi-Threading)
+Der Server wurde erweitert, um mehrere Clients gleichzeitig bedienen zu können:
+1.  Server-Loop- Der Haupt-Server wartet nur auf eingehende Verbindungen accept().
+2.  ClientHandler- Sobald eine Verbindung steht, wird ein ClientHandler-Objekt erstellt.
+3.  Threads- Der ClientHandler wird in einem eigenen Java-Thread new Thread(handler).start() ausgeführt.
+    - Vorteil- Der Haupt-Server wird nicht blockiert und kann sofort weitere Clients annehmen.
+    - Ressourcen- Jeder Client hat seinen eigenen Socket und Input/Output-Stream.
+
+
 ## Projekt-Historie & Updates
 ### Alte Klassen und Methoden (Stand bis 21.11.2025): 
 - **Klasse** // **Methode** // **Beschreibung**
