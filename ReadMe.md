@@ -1,5 +1,5 @@
 # Projektidee 1: Hausaufgaben abgeben und verwalten.
-- Klassen   nammen und Funktionen sind auf Deutsch 
+- Klassennammen und Funktionen sind auf Deutsch 
 ## Projektbeschreibung
 1) Ziel des Projekts: 
 - Das Projekt soll eine Plattform bieten, auf der Schüler ihre Hausaufgaben digital abgeben können und Lehrer sie verwalten, korrigieren und bewerten können. 
