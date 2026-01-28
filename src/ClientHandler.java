@@ -3,10 +3,10 @@ import java.net.Socket;
 
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
-    private DatenbankManager dbManager;
+    private DatabaseManager dbManager;
 
-    // Konstruktor
-    public ClientHandler(Socket socket, DatenbankManager dbManager) {
+    // Constructor
+    public ClientHandler(Socket socket, DatabaseManager dbManager) {
         this.clientSocket = socket;
         this.dbManager = dbManager;
     }
@@ -14,46 +14,46 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try (
-                // Streams öffnen
+                // Open streams
                 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
         ) {
-            System.out.println("Handler gestartet für: " + clientSocket.getInetAddress());
+            System.out.println("Handler started for: " + clientSocket.getInetAddress());
 
             while (true) {
                 try {
-                    // Warten auf Anfrage
-                    Object empfangenesObjekt = in.readObject();
+                    // Waiting for request
+                    Object receivedObject = in.readObject();
 
-                    // Logik
-                    if (empfangenesObjekt instanceof LoginRequest) {
-                        LoginRequest req = (LoginRequest) empfangenesObjekt;
+                    // Logic
+                    if (receivedObject instanceof LoginRequest) {
+                        LoginRequest req = (LoginRequest) receivedObject;
 
-                        // DB Zugriff
-                        Nutzer nutzer = dbManager.login(req.getBenutzername(), req.getPasswort());
+                        // DB Access
+                        User user = dbManager.login(req.getUsername(), req.getPassword());
 
-                        if (nutzer != null) {
-                            out.writeObject(new LoginResponse(Status.LOGIN_SUCCESS, nutzer, "Login erfolgreich!"));
+                        if (user != null) {
+                            out.writeObject(new LoginResponse(Status.LOGIN_SUCCESS, user, "Login successful!"));
                         } else {
-                            out.writeObject(new LoginResponse(Status.INVALID_CREDENTIALS, null, "Falsche Daten."));
+                            out.writeObject(new LoginResponse(Status.INVALID_CREDENTIALS, null, "Incorrect credentials."));
                         }
                         out.flush();
                     } else {
-                        // Unbekanntes Objekt
-                        out.writeObject(new LoginResponse(Status.ERROR, null, "Unbekannte Anfrage!"));
+                        // Unknown object
+                        out.writeObject(new LoginResponse(Status.ERROR, null, "Unknown request!"));
                         out.flush();
                     }
 
                 } catch (EOFException e) {
-                    // Client hat Verbindung getrennt
-                    System.out.println("Client hat die Verbindung getrennt.");
+                    // Client disconnected
+                    System.out.println("Client has disconnected.");
                     break;
                 } catch (ClassNotFoundException e) {
-                    System.out.println("Fehler: Unbekanntes Objekt empfangen.");
+                    System.out.println("Error: Unknown object received.");
                 }
             }
         } catch (IOException e) {
-            System.out.println("Verbindungsfehler im Handler: " + e.getMessage());
+            System.out.println("Connection error in handler: " + e.getMessage());
         } finally {
             try {
                 if (clientSocket != null && !clientSocket.isClosed()) {
