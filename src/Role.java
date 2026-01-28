@@ -1,7 +1,7 @@
 public enum Role {
     ENTITY,
-    SCHUELER,
-    LEHRER,
-    ELTERNTEIL,
+    STUDENT,
+    TEACHER,
+    PARENT,
     ADMIN
 }

@@ -1,16 +1,21 @@
 import java.io.Serializable;
+
 public class LoginRequest implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String benutzername;
-    private String passwort;
-    public LoginRequest(String benutzername, String passwort) {
-        this.benutzername = benutzername;
-        this.passwort = passwort;
+
+    private String username;
+    private String password;
+
+    public LoginRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
-    public String getBenutzername() {
-        return benutzername;
+
+    public String getUsername() {
+        return username;
     }
-    public String getPasswort() {
-        return passwort;
+
+    public String getPassword() {
+        return password;
     }
 }

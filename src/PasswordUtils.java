@@ -3,16 +3,17 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 
 
-public class PasswortUtils {
-    public static String hashPasswort(String passwort) throws NoSuchAlgorithmException {
+public class PasswordUtils {
+    public static String hashPassword(String password) throws NoSuchAlgorithmException {
 
-        //Algorithmus SHA-256
+        // SHA-256 Algorithm
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        //Passwort in Bytes und haschen
-        byte[] encodedhash = digest.digest(passwort.getBytes(StandardCharsets.UTF_8));
-        //Byte in Text umwandeln
+        // Convert password to bytes and hash it
+        byte[] encodedhash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        // Convert bytes to hex string
         return bytesToHex(encodedhash);
     }
+
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (byte b : hash) {

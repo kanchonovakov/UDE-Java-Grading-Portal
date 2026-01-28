@@ -1,24 +1,25 @@
-public class Admin extends Nutzer {
-    //Konstruktor
-    public Admin(String vorname, String nachname, String benutzername,
-                 String passwort) {
-        super(vorname, nachname, benutzername, passwort, Role.ADMIN);
+public class Admin extends User {
+    //Constructor
+    public Admin(String firstName, String lastName, String username,
+                 String password) {
+        super(firstName, lastName, username, password, Role.ADMIN);
     }
 
-    //Funktionen
+    //Functions
 
-    //TODO* Nutzer löschen  ----Selten Benutzt----
-    public void loescheNutzer(int nutzerId) {
-        System.out.println("Admin " + getVollerName() + " löscht Nutzer mit ID: " + nutzerId);
+    //TODO* Delete user ----Seldom Used----
+    public void deleteUser(int userId) {
+        System.out.println("Admin " + getFullName() + " deletes user with ID: " + userId);
     }
-    public void zeigeAlleNutzer() {
-        //TODO DatenBankManager gebraucht*
-        System.out.println("Admin " + getVollerName() + " zeigt alle registrierten Nutzer an.");
+
+    public void showAllUsers() {
+        //TODO DatabaseManager needed*
+        System.out.println("Admin " + getFullName() + " displays all registered users.");
     }
 
     //toString()
     @Override
     public String toString() {
-        return super.toString() + " [Admin - Systemzugriff: Vollständig]";
+        return super.toString() + " [Admin - System Access: Full]";
     }
 }

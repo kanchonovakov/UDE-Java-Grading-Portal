@@ -2,6 +2,6 @@ public enum Command {
     LOGIN,
     QUIT,
     PING,
-    GET_AUFGABEN,
-    ADD_AUFGABE
+    GET_TASKS,
+    ADD_TASK
 }

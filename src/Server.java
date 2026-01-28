@@ -3,35 +3,35 @@ import java.net.*;
 
 public class Server {
     private static final int PORT = 8080;
-    private DatenbankManager dbManager;
+    private DatabaseManager dbManager;
 
     public Server() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            // Verbindung zur DB herstellen
-            dbManager = new DatenbankManager();
+            // Establish connection to DB
+            dbManager = new DatabaseManager();
 
-            // Testdaten nur laden, wenn nötig
-            try { dbManager.erstelleTestDaten(); } catch (Exception e) {}
+            // Load test data only if necessary
+            try { dbManager.createTestData(); } catch (Exception e) {}
 
-            System.out.println(" Server gestartet auf Port " + PORT + " (Multi-Threaded)");
+            System.out.println(" Server started on Port " + PORT + " (Multi-Threaded)");
 
             while (true) {
-                System.out.println("Warte auf neue Verbindung...");
+                System.out.println("Waiting for new connection...");
 
-                // 1. Verbindung annehmen
+                // 1. Accept connection
                 Socket clientSocket = serverSocket.accept();
 
-                // 2. Handler erstellen
+                // 2. Create Handler
                 ClientHandler handler = new ClientHandler(clientSocket, dbManager);
 
-                // 3. NEUEN THREAD STARTEN
-                // Das ist der Schlüssel zur Nebenläufigkeit!
-                // Der Haupt-Server geht sofort zurück zum Anfang der Schleife.
+                // 3. START NEW THREAD
+                // This is the key to concurrency!
+                // The main server loop immediately returns to the start of the loop.
                 new Thread(handler).start();
             }
 
         } catch (IOException e) {
-            System.out.println("Server-Fehler: " + e.getMessage());
+            System.out.println("Server Error: " + e.getMessage());
         }
     }
 

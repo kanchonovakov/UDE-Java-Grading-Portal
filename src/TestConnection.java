@@ -7,15 +7,15 @@ public class TestConnection {
         String url = "jdbc:sqlite:Mydatabase.db";
 
         try (Connection conn = DriverManager.getConnection(url);
-Statement stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
 
-            // Tabelle erstellen, falls nicht vorhanden
+            // Create table if it doesn't exist
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY, name TEXT)");
-            IO.println("Tabelle erstellt oder bereits vorhanden.");
-            IO.println("Verbindung erfolgreich!");
+            IO.println("Table created or already exists.");
+            IO.println("Connection successful!");
 
-            } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            }
         }
+    }
 }

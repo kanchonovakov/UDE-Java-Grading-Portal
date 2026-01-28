@@ -1,23 +1,27 @@
 import java.io.Serializable;
+
 public class LoginResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Status status;
-    private Nutzer nutzer;
-    private String nachricht;
-    public LoginResponse(Status status, Nutzer nutzer, String nachricht) {
+    private User user;
+    private String message;
+
+    public LoginResponse(Status status, User user, String message) {
         this.status = status;
-        this.nutzer = nutzer;
-        this.nachricht = nachricht;
+        this.user = user;
+        this.message = message;
     }
+
     public Status getStatus() {
         return status;
     }
 
-    public Nutzer getNutzer() {
-        return nutzer;
+    public User getUser() {
+        return user;
     }
-    public String getNachricht() {
-        return nachricht;
+
+    public String getMessage() {
+        return message;
     }
 }
