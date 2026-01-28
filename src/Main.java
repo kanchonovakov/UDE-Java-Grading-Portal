@@ -4,7 +4,7 @@ void main() {
 
     DatabaseManager db = new DatabaseManager();
 
-    db.createTestData();
+    //db.createTestData();
     System.out.println("\n--- Teacher creates tasks ---");
 
     db.saveTask("Math P. 42", "Please complete Nr. 1-5.", "2025-12-20", 1);

@@ -10,106 +10,72 @@ import javafx.stage.Stage;
 public class JavaFXApp extends Application {
 
     private NetworkClient networkClient;
-    private TextArea outputArea; // Output area for status/logs
+    private TextArea outputArea;
+    private RequestController controller;
 
     @Override
     public void start(Stage primaryStage) {
-        // 1. Prepare Network Client
+        // 1. Initialize Network and Controller
         networkClient = new NetworkClient("localhost", 8080);
 
-        // 2. Create GUI Layout
+        // This connects the Model logic to the GUI via the Listener
+        controller = new RequestController(networkClient, new TaskUpdateListener() {
+            @Override
+            public void onStatusUpdate(String message) {
+                log("[STATUS]: " + message);
+            }
+
+            @Override
+            public void onTaskCompleted(Object result) {
+                if (result instanceof LoginResponse) {
+                    LoginResponse resp = (LoginResponse) result;
+                    log("Server Message: " + resp.getMessage());
+                    if (resp.getStatus() == Status.LOGIN_SUCCESS) {
+                        log("Welcome, " + resp.getUser().getFullName());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                log("[ERROR]: " + errorMessage);
+            }
+        });
+
+        // 2. GUI Layout (Same as before)
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
 
-        // --- Top: Login ---
         VBox topBox = new VBox(10);
         TextField userField = new TextField();
         userField.setPromptText("Username");
-
         PasswordField passField = new PasswordField();
         passField.setPromptText("Password");
-
         Button loginButton = new Button("Login");
         topBox.getChildren().addAll(new Label("Login"), userField, passField, loginButton);
         root.setTop(topBox);
 
-        // --- Center: Logs/Status ---
         outputArea = new TextArea();
         outputArea.setEditable(false);
-        outputArea.setPrefHeight(200);
         root.setCenter(outputArea);
 
-        // --- Bottom: Close Connection ---
-        Button disconnectButton = new Button("Disconnect / Exit");
-        root.setBottom(disconnectButton);
-
-        // 3. Link Logic
-
-        // LOGIN BUTTON
+        // 3. The New Event Handling
         loginButton.setOnAction(e -> {
-            String user = userField.getText();
-            String pass = passField.getText();
-            log("Attempting login for: " + user + "...");
+            LoginRequest req = new LoginRequest(userField.getText(), passField.getText());
 
-            new Thread(() -> performLogin(user, pass)).start();
+            log("Login request put into queue...");
+            controller.enqueueRequest(req);
         });
 
-        // DISCONNECT BUTTON
-        disconnectButton.setOnAction(e -> {
-            networkClient.disconnect();
-            Platform.exit();
-        });
-
-        // 4. Set Scene and Show
         Scene scene = new Scene(root, 400, 400);
-        primaryStage.setTitle("Homework Client (JavaFX)");
+        primaryStage.setTitle("Homework Client (MVC)");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    // Helper method - Login logic in background thread
-    private void performLogin(String user, String pass) {
-        try {
-            // Connect if not already connected
-            networkClient.connect();
-
-            // Build request object
-            LoginRequest request = new LoginRequest(user, pass);
-
-            // Send and receive response
-            Object responseObj = networkClient.sendRequest(request);
-            Platform.runLater(() -> {
-                if (responseObj instanceof LoginResponse) {
-                    LoginResponse resp = (LoginResponse) responseObj;
-                    log("Server Response: " + resp.getStatus());
-                    log("Message: " + resp.getMessage());
-
-                    if (resp.getStatus() == Status.LOGIN_SUCCESS) {
-                        User n = resp.getUser();
-                        log("--> Logged in as: " + n.getFullName() + " (" + n.getRole() + ")");
-                        // You could switch to the next view here
-                    }
-                } else {
-                    log("Unknown response received.");
-                }
-            });
-
-        } catch (Exception ex) {
-            Platform.runLater(() -> log("Error: " + ex.getMessage()));
-        }
-    }
-
-    // Helper method to write text to the TextArea
     private void log(String message) {
-        outputArea.appendText(message + "\n");
-    }
-
-    @Override
-    public void stop() {
-        // Cleanup when closing the window
-        if (networkClient != null) {
-            networkClient.disconnect();
-        }
+        // Platform.runLater ensures the UI updates are on the correct thread
+        Platform.runLater(() -> outputArea.appendText(message + "\n"));
     }
 
     public static void main(String[] args) {

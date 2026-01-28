@@ -1,5 +1,19 @@
 # Projektidee 1: Hausaufgaben abgeben und verwalten.
+# -------------------------------------------------
+### Build and Run Instructions (Linux/Ubuntu)
+1. Ensure SQLite and JavaFX are in the classpath.
+2. Compile: `javac --module-path $PATH_TO_FX --add-modules javafx.controls,javafx.fxml *.java`
+3. Start Server: `java Server`
+4. Start Client: `java JavaFXApp`
 
+### Documentation of Critical Sections & MVC
+- Critical Section: The `RequestController` contains a shared `LinkedList`.
+  Access is protected using `synchronized` blocks.
+  Thread signaling is handled via `wait()` and `notify()`, ensuring no active waiting.
+- Producer-Consumer: The GUI acts as a Producer, enqueuing requests. A background Daemon-Thread acts as a Consumer.
+- Error Handling: Errors are captured in the Model layer and passed to the View via the `TaskUpdateListener` interface, ensuring a clean MVC separation.
+
+# ---------------------------------------------------
 ## Projektbeschreibung
 1) Ziel des Projekts:
 - Das Projekt soll eine Plattform bieten, auf der Student ihre Task digital abgeben können und Teacher sie verwalten, korrigieren und bewerten können.
