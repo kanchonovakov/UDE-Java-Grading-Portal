@@ -136,29 +136,38 @@ public class DatabaseManager {
             System.out.println("Delete error: " + e.getMessage());
         }
     }
-
     // Creates test data if DB is empty
     public synchronized void createTestData() {
+        boolean dataExists = false;
         String checkSql = "SELECT count(*) FROM users";
+
+        //Nur prüfen
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(checkSql)) {
 
             if (rs.next() && rs.getInt(1) > 0) {
-                return; // Data already exists
+                dataExists = true;
             }
-
-            System.out.println("Creating test data...");
-            saveUser("Hans", "Müller", "h.mueller", "1234", "TEACHER");
-            saveUser("Max", "Mustermann", "max", "1234", "STUDENT");
-            saveUser("Lisa", "Schlau", "lisa", "1234", "STUDENT");
-            saveUser("Sabine", "Mustermann", "s.muster", "1234", "PARENT");
-
-            saveTask("Math P.42", "Solve Nr 1-5", "2026-02-01", 1);
-
         } catch (SQLException e) {
-            System.out.println("Test data error: " + e.getMessage());
+            System.out.println("Check error: " + e.getMessage());
+            return; // Abbrechen bei fehler
         }
+        if (dataExists) {
+            return;
+        }
+
+        //Jetzt ist die Bahn frei zum Speichern
+        System.out.println("Creating test data...");
+
+        saveUser("Hans", "Müller", "h.mueller", "1234", "TEACHER");
+        saveUser("Max", "Mustermann", "max", "1234", "STUDENT");
+        saveUser("Lisa", "Schlau", "lisa", "1234", "STUDENT");
+        saveUser("Sabine", "Mustermann", "s.muster", "1234", "PARENT");
+
+        saveTask("Math P.42", "Solve Nr 1-5", "2026-02-01", 1);
+
+        System.out.println("--- Test Data Created Successfully ---");
     }
 
     // Login Logic
