@@ -3,5 +3,5 @@ public enum Status {
     ERROR,
     LOGIN_SUCCESS,
     INVALID_CREDENTIALS,
-    NOT_FOUND
+    LOGIN_FAILED, NOT_FOUND
 }

@@ -7,13 +7,11 @@ public class Admin extends User {
 
     //Functions
 
-    //TODO* Delete user ----Seldom Used----
     public void deleteUser(int userId) {
         System.out.println("Admin " + getFullName() + " deletes user with ID: " + userId);
     }
 
     public void showAllUsers() {
-        //TODO DatabaseManager needed*
         System.out.println("Admin " + getFullName() + " displays all registered users.");
     }
 

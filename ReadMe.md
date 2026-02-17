@@ -5,6 +5,13 @@
 2. Compile: `javac --module-path $PATH_TO_FX --add-modules javafx.controls,javafx.fxml *.java`
 3. Start Server: `java Server`
 4. Start Client: `java JavaFXApp`
+5. Login with credentials (e.g., h.mueller/1234, max/1234, s.muster/1234).
+6. Create some exercises to check the functionality.
+7. Solve some exercises to check the functionality (exercise solution - 1+1=2)
+8. Observe the interactions between Teacher, Student, and Parent. 
+9. Check the database to verify data persistence.
+
+
 
 ### Documentation of Critical Sections & MVC
 - Critical Section: The `RequestController` contains a shared `LinkedList`.
@@ -13,21 +20,23 @@
 - Producer-Consumer: The GUI acts as a Producer, enqueuing requests. A background Daemon-Thread acts as a Consumer.
 - Error Handling: Errors are captured in the Model layer and passed to the View via the `TaskUpdateListener` interface, ensuring a clean MVC separation.
 
+
+### Changes of the planned implementation of the idea due to complex requirements and upload data safety ***
 # ---------------------------------------------------
 ## Projektbeschreibung
 1) Ziel des Projekts:
-- Das Projekt soll eine Plattform bieten, auf der Student ihre Task digital abgeben können und Teacher sie verwalten, korrigieren und bewerten können.
-    - a) Hauptaufgabe: Task werden in dem Programm erstellt, hochgeladen, überprüft und angesehen.
+- Das Projekt soll eine Plattform bieten, auf der Student ihre Task digital abgeben können und Teacher sie verwalten können.
+    - a) Hauptaufgabe: Task werden in dem Programm erstellt, geantwortet, überprüft und angesehen.
     - b) Zielgruppe/Nutzen: Student, Teacher und Parent
-    - c) Motivation: Digitale Speicherung von Hausaufgaben. Digitales ist einfacher als in Papier, es ist auch Umweltfreundlicher. (Mehrwert – Zeit sparen).
+    - c) Motivation: Digitale Speicherung von Hausaufgaben. Digitales ist einfacher als in Papier, es ist auch umweltfreundlicher. (Mehrwert – Zeit sparen).
 
 - **Geplante Funktionalitäten**:
-    - Must have: Informationen über Teacher und ihre Student verwalten und bereitstellen. Datennutzungshierarchie und Hierarchiemanagement. Die Student dürfen Dateien senden und lesen, Parent dürfen nur die Dateien lesen und die Teacher dürfen Dateien korrigieren, lesen und neue Task erstellen.
-    - Nice to have: Erstellung von Profilen durch verschiedene Codes, damit die Nutzer einfach verknüpft im System sein können. Versendung von Erklärungen ist wichtig.
+    - Must have: Informationen über Teacher und ihre Student verwalten und bereitstellen. Datennutzungshierarchie und Hierarchiemanagement. Die Student dürfen Dateien senden und lesen, Parent dürfen nur die Dateien lesen und die Teacher dürfen Dateien lesen und neue Task erstellen.
+    - Nice to have: Erstellung von Profilen durch DatabaseManager, damit die Nutzer einfach verknüpft im System sein können. Versendung von Erklärungen wie der App funktioniert, is wichtig. 
     - Should have: Speicherung von alten Task und eine flexible Hierarchie. Informationen über Student und die Verbindung zu ihren Parent.
 
 - **Bereits Implementierte Funktionen**:
-    - Must have: Erstellung von Task durch Teacher, Hochladen von Dateien durch Student, Korrektur und Bewertung durch Teacher.
+    - Must have: Erstellung von Task durch Teacher, Antworten der Schüler auf die Aufgabe, Lesen der Aufgaben von den Parent.
     - Nice to have: Nutzerprofile für Student, Teacher und Parent.
     - Should have: Speicherung von alten Task und Verbindungen zwischen Nutzern.
     - Netzwerk: Client-Server-Kommunikation mittels Java Serialisierung (Multi-Threading & Synchronisation)
